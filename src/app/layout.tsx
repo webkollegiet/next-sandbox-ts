@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import SiteHeader from "@/components/layout/site-header";
+import SiteFooter from "@/components/layout/site-footer";
 
 export const metadata: Metadata = {
 	title: "En god titel",
@@ -12,7 +14,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 			lang="da"
 			className="h-full antialiased"
 		>
-			<body className="min-h-full">{children}</body>
+			<body className="min-h-full">
+				<SiteHeader />
+				{children}
+				<SiteFooter />
+			</body>
 		</html>
 	);
 }
