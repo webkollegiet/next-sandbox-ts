@@ -25,6 +25,8 @@ export default async function loginAction(prevState, formData) {
 				password: validated.data.password
 			}
 		});
+
+		console.log(response);
 	} catch (error) {
 
 	}
