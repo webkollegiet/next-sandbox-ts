@@ -1,35 +1,37 @@
 "use server";
 import serverFetch from "@/library/server-fetch";
-
+import { newsletterFormSchema } from "@/library/schemas";
 import z from "zod";
 
 export default async function newsletterAction(prevState, formData) {
 	const name = formData.get("name");
 	const email = formData.get("email");
 
-	const schema = z.object({
-		name: z.string().min(4, "NAVNET ER FOR KORT, ALLAN!"),
-		email: z.email("DET' IK' EN EMAIL, DIN NØD!!")
-	});
-
-	const validated = schema.safeParse({ name, email });
+	const validated = newsletterFormSchema.safeParse({ name, email });
 	if (!validated.success) {
 		console.log("error: ", z.flattenError(validated.error).fieldErrors);
 		return {
-			name, 
+			name,
 			email,
 			error: z.flattenError(validated.error).fieldErrors
 		};
 	}
 
-	
-	const subscriber = await serverFetch({
-		endpoint: "/subscribers", 
-		method: "POST",
-		body:  { ...validated.data } 
-	})
-
-	console.log(subscriber)
+	try {
+		const subscriber = await serverFetch({
+			endpoint: "/subscribers",
+			method: "POST",
+			body: { ...validated.data }
+		});
+	} catch (error) {
+		if (error.message === "API_RESPONSE_NOT_OK") {
+			return {
+				name: validated.data.name,
+				email: validated.data.email,
+				message: "Noget gik galt, prøv igen."
+			}
+		}
+	}
 
 	// sende data til api send tak besked... 
 	return {
@@ -37,5 +39,4 @@ export default async function newsletterAction(prevState, formData) {
 		email: "",
 		message: "Tak for din tilmelding..."
 	}
-
 }

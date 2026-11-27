@@ -25,10 +25,10 @@ export default function NewsletterForm() {
 				type="submit"
 				className="bg-blue-500 text-white text-bold px-4 py-1 rounded-md"
 				disabled={pending}
-				>
+			>
 				{pending ? 'Tilmelder...' : 'Tilmeld'}
 			</button>
-			{ formState.message && <span>{formState.message}</span>}
+			{formState.message && <span>{formState.message}</span>}
 		</form>
-	);W
+	);
 }

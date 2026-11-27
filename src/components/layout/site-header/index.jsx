@@ -17,7 +17,7 @@ export default function SiteHeader() {
 							<Link href="#">Link 2</Link>
 						</li>
 						<li>
-							<Link href="#">Link 3</Link>
+							<Link href="/login">Log ind</Link>
 						</li>
 					</ul>
 				</nav>
