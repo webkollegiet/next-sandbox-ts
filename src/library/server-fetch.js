@@ -1,8 +1,14 @@
 const API_BASE_URL = "http://localhost:4000/api/v1";
 
-export default async function serverFetch({ endpoint, method = "GET" }) {
+export default async function serverFetch({ endpoint, method = "GET", body = undefined }) {
+
 	const response = await fetch(API_BASE_URL + endpoint, {
-		method
+		method,
+		...(method === "POST" && { 
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify( body )
+		})
+		
 	});
 
 	const contentType = response.headers.get("content-type");

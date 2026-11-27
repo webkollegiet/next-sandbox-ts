@@ -1,4 +1,5 @@
 "use server";
+import serverFetch from "@/library/server-fetch";
 
 import z from "zod";
 
@@ -12,11 +13,29 @@ export default async function newsletterAction(prevState, formData) {
 	});
 
 	const validated = schema.safeParse({ name, email });
-
 	if (!validated.success) {
+		console.log("error: ", z.flattenError(validated.error).fieldErrors);
 		return {
-			...validated,
-			error: z.flattenError(validated.error)
+			name, 
+			email,
+			error: z.flattenError(validated.error).fieldErrors
 		};
 	}
+
+	
+	const subscriber = await serverFetch({
+		endpoint: "/subscribers", 
+		method: "POST",
+		body:  { ...validated.data } 
+	})
+
+	console.log(subscriber)
+
+	// sende data til api send tak besked... 
+	return {
+		name: "",
+		email: "",
+		message: "Tak for din tilmelding..."
+	}
+
 }
